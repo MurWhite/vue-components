@@ -1,0 +1,30 @@
+/*slide-fade 效果*/
+.slide-fade-enter, .slide-fade-leave-active {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+
+.slide-fade-leave-active {
+  transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+/*fade 效果*/
+.fade-enter, .fade-leave {
+  opacity: 0;
+}
+
+.fade-enter-active,.fade-leave-active {
+  transition: all .3s ease;
+}
+/*动画 旋转loading*/
+@keyframes spin_loading {
+  0% {
+    transform: rotate3d(0, 0, 1, 0deg);
+  }
+  100% {
+    transform: rotate3d(0, 0, 1, 360deg);
+  }
+}
