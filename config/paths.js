@@ -4,5 +4,5 @@
 var path = require('path')
 
 module.exports = {
-  distDir: path.resolve(__dirname, '../dist')
+  distDir: path.resolve(__dirname, '../docs')
 };
