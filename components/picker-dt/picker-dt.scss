@@ -28,7 +28,7 @@
       @include cross-line_after;
       position: absolute;
       z-index: 5;
-      height: 3rem;
+      height: 4rem;
       top: 50%;
       left: 0;
       right: 0;
@@ -64,8 +64,8 @@
         transition: all .3s ease;
 
         .picker-item{
-          padding: .4rem 0;
           box-sizing: border-box;
+          line-height: 4rem;
         }
       }
     }
