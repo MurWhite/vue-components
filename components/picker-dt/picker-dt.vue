@@ -88,8 +88,6 @@
         default: false
       },
     },
-    created(){
-    },
     updated(){
       // 修正滚轮位置
       this.$refs.PickerBody && this.fixPickerPosition();
@@ -106,6 +104,7 @@
       mask(){
         this.$emit('mask')
       },
+
       /* 根据chosenIndex来修正滚轮的位置 */
       fixPickerPosition(){
         if (this.$refs.PickerBody) {
@@ -121,6 +120,7 @@
         } else {
           console.warn('picker没有dom实例，不能校准选择器位置')
         }
+        console.log(this.chosenDate.getTime())
       },
       /* 获取到正确的滚轮节点 */
       getContentNode(groupNode){
@@ -143,7 +143,6 @@
           targetIndex = targetIndex < 0 ? 0 : targetIndex;
           targetIndex = targetIndex >= this[`${type}s`].length ? this[`${type}s`].length - 1 : targetIndex;
           this.chosenIndex[type] = targetIndex;
-          console.log(targetIndex)
         }
       },
       /* 处理滚轮的触摸滚动 */
@@ -176,26 +175,30 @@
       }
     },
     computed: {
-      days: {
-        get(){
-          let year = this.years[this.chosenIndex.year],
-            month = this.months[this.chosenIndex.month] + 1, days;
-          if ([1, 3, 5, 7, 8, 10, 12].indexOf(month) > -1) {
-            days = Array.apply(null, Array(31)).map((item, i)=> i + 1);
-          } else if (month == 2) {
-            if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
-              days = Array.apply(null, Array(29)).map((item, i)=> i + 1);
-            } else {
-              days = Array.apply(null, Array(28)).map((item, i)=> i + 1);
-            }
+      days() {
+        let year = this.years[this.chosenIndex.year],
+          month = this.months[this.chosenIndex.month] + 1, days;
+        if ([1, 3, 5, 7, 8, 10, 12].indexOf(month) > -1) {
+          days = Array.apply(null, Array(31)).map((item, i)=> i + 1);
+        } else if (month == 2) {
+          if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
+            days = Array.apply(null, Array(29)).map((item, i)=> i + 1);
           } else {
-            days = Array.apply(null, Array(30)).map((item, i)=> i + 1);
+            days = Array.apply(null, Array(28)).map((item, i)=> i + 1);
           }
-          if (this.chosenIndex.day - days.length > -1) {
-            this.chosenIndex.day = days.length - 1;
-          }
-          return days;
+        } else {
+          days = Array.apply(null, Array(30)).map((item, i)=> i + 1);
         }
+        if (this.chosenIndex.day - days.length > -1) {
+          this.chosenIndex.day = days.length - 1;
+        }
+        return days;
+      },
+      chosenDate(){
+        let chosen = this.chosenIndex,
+          date = new Date(this.years[chosen.year], this.months[chosen.month], this.days[chosen.day]);
+//        console.log(date)
+        return date;
       }
     },
     components: {picker}
