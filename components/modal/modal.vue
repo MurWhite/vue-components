@@ -1,9 +1,9 @@
 <template>
   <transition name="fade">
     <div v-if="show" class="modal-wrap">
-      <div class="mask" @click="close"></div>
+      <div class="mask" @click="mask"></div>
       <div v-if=" type=='' " class="modal">
-        <slot>这只是一个modal，内容完全你自己决定，甚至背景色我都不管你</slot>
+        <slot>这只是一个modal，内容完全你自己决定，甚至背景色我都不管你，我只是帮你做了居中</slot>
       </div>
       <div v-else-if=" type=='dialog' " class="modal modal-dialog">
         <div v-if="title" class="modal-hd">{{title}}</div>

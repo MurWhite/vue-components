@@ -1,8 +1,9 @@
 <template>
   <div class="wrap">
     <div>表单元素</div>
-    <router-link to="buttons" class="index-a">按钮</router-link>
-    <router-link to="modals" class="index-a">Dialogs</router-link>
+    <router-link to="buttons" class="btn btn_primary">按钮</router-link>
+    <router-link to="modals" class="btn btn_primary">弹出层,使用mask遮罩</router-link>
+    <router-link to="modals" class="btn btn_primary"></router-link>
     <transition name="slide-fade">
       <router-view class="drawer-wrap"></router-view>
     </transition>
@@ -17,10 +18,11 @@
   }
 </script>
 <style lang="scss">
+  @import "../../components/assests/reset.scss";
   @import "../../components/animation/animation.scss";
 
-  .index-a{
-    display: block;
+  .wrap>.btn{
+    margin: 1rem;
   }
   .drawer-wrap{
     position: absolute;
@@ -30,6 +32,5 @@
     bottom: 0;
     background-color: #f8f8f8;
   }
-
 
 </style>

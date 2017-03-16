@@ -19,7 +19,8 @@ module.exports = {
   resolve: {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      'button$': './components/button/button.vue'
+      'button$': path.join(__dirname, './components/button/button.vue'),
+      'config' : path.join(__dirname, './config')
     }
   },
   module: {

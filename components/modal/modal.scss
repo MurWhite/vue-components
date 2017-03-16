@@ -5,6 +5,7 @@
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 2010;
 
   .modal {
     position: absolute;
@@ -19,18 +20,22 @@
     padding: 0 1.5rem 1.5rem;
     display: flex;
     flex-direction: column;
+    width: 28.5rem;
 
     .modal-hd{
       @include cross-line_after;
       padding: 1.3rem;
-      width: 28.5rem;
       text-align: center;
     }
     .modal-bd{
 
     }
     .modal-ft{
-
+      .btn_group{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
     }
   }
 }
