@@ -2,14 +2,10 @@
   <transition name="fade" v-on:enter="enter">
     <div v-if="show" class="picker-wrap">
       <div class="mask" @click="mask"></div>
-      <transition name="popup-fade" v-on:after-leave="afterLeave">
+      <transition name="popup-fade" v-on:after-leave="afterLeave"
+                  v-on:after-enter="afterEnter">
         <div v-if="showPicker" class="picker">
           <slot>空白的popup</slot>
-          <!--<div style="height: 280px;overflow-y: scroll">-->
-            <!--<div style="background-color: #ccc;width: 100px;-webkit-overflow-scrolling: touch">-->
-              <!--<div v-for="i in 100">{{i}}</div>-->
-            <!--</div>-->
-          <!--</div>-->
         </div>
       </transition>
     </div>
@@ -42,6 +38,9 @@
       },
       afterLeave(){
         this.$emit('mask');
+      },
+      afterEnter(){
+        this.$emit('afterShow')
       }
     },
     components: {}

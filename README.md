@@ -3,7 +3,12 @@
 
 在[这里](https://murwhite.github.io/vue-components/#/)访问demo
 
-视觉层级规范z-index
+## 建议的使用方式
+
+- 复制组件的文件夹到自己的项目中
+- webpack中配置scss-loader,postcss-loader
+
+## 视觉层级规范(z-index)
 层级间预留值用于方便用户自定义
 
 - 0 ：主体内容
@@ -18,15 +23,15 @@ z-index使用注意：
 div{position: absolute}
 </style>
 <div style="background-color: red;z-index: 10">
-    1
+    RED
     <div style="background-color: orange; z-index: 999999">
-        1-1
+        ORANGE
     </div>
 </div>
 <div style="background-color: yellow;z-index: 11">
-    2
+    YELLOW
 </div>
 ```
-在上面代码中，2 在 1-1 的上面，即使 1-1 的z-index远大于 2。
+在上面代码中，`YELLOW` 在 `ORANGE` 的上面，即使 `ORANGE` 的z-index远大于 `YELLOW`。
 
 因此，位于不同父元素下的组件，层级关系需要仔细考虑。

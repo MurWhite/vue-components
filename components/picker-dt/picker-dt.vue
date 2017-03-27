@@ -1,9 +1,9 @@
 <template>
-  <picker :show="show" @mask="mask">
+  <picker :show="show" @mask="emit('mask')" @afterShow="initPicker">
     <div class="picker-dt-wrap">
       <div class="picker-hd">
-        <a>取消</a>
-        <a>确定</a>
+        <a href="javascript:;" @click="emit('cancel')">取消</a>
+        <a href="javascript:;" @click="confirm">确定</a>
       </div>
       <div ref="PickerBody" class="picker-bd">
         <div picker-type="year" class="picker-group" @click="tapChoose($event)">
@@ -90,10 +90,6 @@
         default: false
       },
     },
-    updated(){
-      // 修正滚轮位置
-      this.$refs.PickerBody && this.fixPickerPosition();
-    },
     watch: {
       chosenIndex: {
         deep: true,
@@ -103,10 +99,15 @@
       }
     },
     methods: {
-      mask(){
-        this.$emit('mask')
+      initPicker(){
+        this.$refs.PickerBody && this.fixPickerPosition();
       },
-
+      emit(action){
+        this.$emit(action)
+      },
+      confirm(){
+        this.$emit('confirm',{ts: this.chosenDate.getTime()})
+      },
       /* 根据chosenIndex来修正滚轮的位置 */
       fixPickerPosition(){
         if (this.$refs.PickerBody) {
@@ -122,7 +123,7 @@
         } else {
           console.warn('picker没有dom实例，不能校准选择器位置')
         }
-//        console.log(this.chosenDate.getTime())
+//        let time = new Date(this.chosenDate.getTime());
       },
       /* 获取到正确的滚轮节点 */
       getContentNode(groupNode){
@@ -189,9 +190,7 @@
 
         targetNode.style.transition = null;
         this.chosenIndex[type] = targetIndex;
-        this.fixPickerPosition();
-
-
+        this.fixPickerPosition()
       }
     },
     computed: {

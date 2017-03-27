@@ -21,9 +21,10 @@
     </modal>
     <picker :show="picker.show" @mask="picker.show=false" />
     <keep-alive>
-      <dtpicker :show="dtpicker.show" @mask="dtpicker.show=false"></dtpicker>
+      <dtpicker :show="dtpicker.show"
+                @confirm="handleDTpicker"
+                @mask="dtpicker.show=false"/>
     </keep-alive>
-    <div v-for="i in 100">{{i}}</div>
   </div>
 </template>
 <style lang="scss">
@@ -37,8 +38,7 @@
 </style>
 <script>
   import modal from '../../components/modal/modal.vue'
-//  import btn from '../../components/button/button.vue'
-  import btn from 'button'
+  import btn from '../../components/button/button.vue'
   import picker from '../../components/picker/picker.vue'
   import dtpicker from '../../components/picker-dt/picker-dt.vue'
 
@@ -60,6 +60,9 @@
       show(module,arg){
         this[module].show = true
         this[module].type = arg
+      },
+      handleDTpicker(time){
+        console.log(time)
       }
     },
     components: {modal, btn, picker, dtpicker}
