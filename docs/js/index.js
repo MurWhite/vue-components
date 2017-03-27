@@ -318,10 +318,12 @@ __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(VueTouch, { name: 'v-to
         month: 2,
         day: 30
       },
-      years: [1900, 2000, 2001, 2002],
+      years: [1900, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013],
       months: Array.apply(null, Array(12)).map((item, i) => i),
       panData: {
-        startY: 0
+        startY: 0,
+        lastTs: 0,
+        lastY: 0
       }
     };
   },
@@ -362,7 +364,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(VueTouch, { name: 'v-to
       } else {
         console.warn('picker没有dom实例，不能校准选择器位置');
       }
-      console.log(this.chosenDate.getTime());
+      //        console.log(this.chosenDate.getTime())
     },
     /* 获取到正确的滚轮节点 */
     getContentNode(groupNode) {
@@ -394,17 +396,36 @@ __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(VueTouch, { name: 'v-to
       let targetNode = this.getContentNode(e.target.parentNode);
       targetNode.style.transition = 'none';
       this.panData.startY = targetNode.style.top.slice(0, -2);
+
+      /*惯性滑动处理*/
+      this.panData.lastTs = e.timeStamp;
+      this.panData.deltaY = 0;
     },
     touchMove(e) {
       e.preventDefault();
       let targetNode = this.getContentNode(e.target.parentNode);
       targetNode.style.top = `${parseInt(this.panData.startY) + e.deltaY}px`;
+
+      /*惯性滑动处理*/
+      if (e.timeStamp - this.panData.lastTs > 300) {
+        this.panData.lastTs = e.timeStamp;
+        this.panData.deltaY = e.deltaY - this.panData.deltaY;
+      }
     },
     touchEnd(e) {
       e.preventDefault();
       let parent = e.target.parentNode;
       let targetNode = this.getContentNode(parent),
           nowTop = parseInt(targetNode.style.top.slice(0, -2));
+
+      /*惯性滑动处理*/
+      let dT = e.timeStamp - this.panData.lastTs,
+          dS = e.deltaY - this.panData.deltaY;
+      let dD = -Math.pow(dS / dT, 2) / (2 * -0.006); // 加速度距离公式 v*v - v0*v0 = 2ax
+      if (dS < 0) {
+        dD = -dD;
+      }
+      nowTop += dD;
 
       let type = parent.getAttribute('picker-type');
       let targetIndex = Math.round((parent.clientHeight / 2 - nowTop) / this.itemHeight - 0.5);
@@ -441,7 +462,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(VueTouch, { name: 'v-to
     chosenDate() {
       let chosen = this.chosenIndex,
           date = new Date(this.years[chosen.year], this.months[chosen.month], this.days[chosen.day]);
-      //        console.log(date)
       return date;
     }
   },
@@ -455,6 +475,11 @@ __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(VueTouch, { name: 'v-to
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
 //
 //
 //
@@ -567,6 +592,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_picker_picker_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_picker_picker_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_picker_dt_picker_dt_vue__ = __webpack_require__(321);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_picker_dt_picker_dt_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_picker_dt_picker_dt_vue__);
+//
 //
 //
 //
@@ -1312,7 +1338,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.dtpicker.show = false
       }
     }
-  })], 1)], 1)
+  })], 1), _vm._v(" "), _vm._l((100), function(i) {
+    return _c('div', [_vm._v(_vm._s(i))])
+  })], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

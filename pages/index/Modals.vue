@@ -23,6 +23,7 @@
     <keep-alive>
       <dtpicker :show="dtpicker.show" @mask="dtpicker.show=false"></dtpicker>
     </keep-alive>
+    <div v-for="i in 100">{{i}}</div>
   </div>
 </template>
 <style lang="scss">
