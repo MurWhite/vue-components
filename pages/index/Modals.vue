@@ -19,20 +19,23 @@
         <btn class="btn mt-yellow">按钮2</btn>
       </div>
     </modal>
-    <picker :show="picker.show" @mask="picker.show=false" />
+    <picker :show="picker.show" @mask="picker.show=false"/>
     <keep-alive>
       <dtpicker :show="dtpicker.show"
                 @confirm="handleDTpicker"
+                @cancel="dtpicker.show=false"
                 @mask="dtpicker.show=false"/>
     </keep-alive>
   </div>
 </template>
 <style lang="scss">
   @import "../../components/assests/debris.scss";
+
   .modals-wrap {
     z-index: 99;
   }
-  .modals-wrap>.btn{
+
+  .modals-wrap > .btn {
     margin: 1rem;
   }
 </style>
@@ -45,19 +48,19 @@
   export default{
     data () {
       return {
-        modal:{
+        modal: {
           show: false
         },
-        picker:{
+        picker: {
           show: false
         },
-        dtpicker:{
+        dtpicker: {
           show: false
         }
       }
     },
-    methods:{
-      show(module,arg){
+    methods: {
+      show(module, arg){
         this[module].show = true
         this[module].type = arg
       },

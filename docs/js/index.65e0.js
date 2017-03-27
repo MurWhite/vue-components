@@ -79,50 +79,62 @@ module.exports = Component.exports
 /***/ }),
 
 /***/ 120:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(119);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(332);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__index_vue__ = __webpack_require__(324);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__index_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__index_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Buttons_vue__ = __webpack_require__(322);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Buttons_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__Buttons_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Modals_vue__ = __webpack_require__(323);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Modals_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__Modals_vue__);
-/**
- * Created by BaiBai on 2017/3/1.
- */
 
 
+var _vue = __webpack_require__(119);
+
+var _vue2 = _interopRequireDefault(_vue);
+
+var _vueRouter = __webpack_require__(332);
+
+var _vueRouter2 = _interopRequireDefault(_vueRouter);
+
+var _index = __webpack_require__(324);
+
+var _index2 = _interopRequireDefault(_index);
+
+var _Buttons = __webpack_require__(322);
+
+var _Buttons2 = _interopRequireDefault(_Buttons);
+
+var _Modals = __webpack_require__(323);
+
+var _Modals2 = _interopRequireDefault(_Modals);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_vue2.default.use(_vueRouter2.default); /**
+                                         * Created by BaiBai on 2017/3/1.
+                                         */
 
 
-
-
-
-__WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]);
-
-const routes = [{
-  path: '/', component: __WEBPACK_IMPORTED_MODULE_2__index_vue___default.a,
-  children: [{ path: 'buttons', component: __WEBPACK_IMPORTED_MODULE_3__Buttons_vue___default.a }, { path: 'modals', component: __WEBPACK_IMPORTED_MODULE_4__Modals_vue___default.a }]
+var routes = [{
+  path: '/', component: _index2.default,
+  children: [{ path: 'buttons', component: _Buttons2.default }, { path: 'modals', component: _Modals2.default }]
 }];
 
-const router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
-  routes
+var router = new _vueRouter2.default({
+  routes: routes
 });
 
-const app = new __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */]({
-  router
+var app = new _vue2.default({
+  router: router
 }).$mount('#app');
 
 /***/ }),
 
 /***/ 122:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 //
 //
 //
@@ -136,10 +148,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 
-/* harmony default export */ __webpack_exports__["default"] = {
-  data() {
+exports.default = {
+  data: function data() {
     return {};
   },
+
   props: {
     loadingText: String,
     disabled: {
@@ -149,7 +162,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
   computed: {},
   methods: {
-    handleClick() {
+    handleClick: function handleClick() {
       // 自定义一些预先处理
       this.$emit('click');
     }
@@ -159,10 +172,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ }),
 
 /***/ 123:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 //
 //
 //
@@ -188,12 +205,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-/* harmony default export */ __webpack_exports__["default"] = {
-  data() {
+exports.default = {
+  data: function data() {
     return {
       pageScrollTop: 0
     };
   },
+
   props: {
     show: Boolean,
     type: {
@@ -203,7 +221,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     title: String
   },
   watch: {
-    show(to) {
+    show: function show(to) {
       /* 阻止滚动穿透 */
       if (to) {
         this.pageScrollTop = document.body.scrollTop || document.documentElement.scrollTop;
@@ -216,12 +234,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     }
   },
   methods: {
-    mask(e) {
+    mask: function mask(e) {
       e.preventDefault();
       e.stopPropagation();
       this.$emit('mask');
     },
-    close(e) {
+    close: function close(e) {
       e.preventDefault();
       e.stopPropagation();
       this.$emit('close');
@@ -233,14 +251,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ }),
 
 /***/ 124:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(119);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__picker_picker_vue__ = __webpack_require__(118);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__picker_picker_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__picker_picker_vue__);
-//
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _vue = __webpack_require__(119);
+
+var _vue2 = _interopRequireDefault(_vue);
+
+var _picker = __webpack_require__(118);
+
+var _picker2 = _interopRequireDefault(_picker);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var VueTouch = __webpack_require__(341); //
 //
 //
 //
@@ -301,14 +331,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+_vue2.default.use(VueTouch, { name: 'v-touch' });
 
-const VueTouch = __webpack_require__(341);
-__WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(VueTouch, { name: 'v-touch' });
-
-
-/* harmony default export */ __webpack_exports__["default"] = {
-  data() {
-    let now = new Date(),
+exports.default = {
+  data: function data() {
+    var now = new Date(),
         year = now.getFullYear(),
         month = now.getMonth();
     return {
@@ -319,7 +346,9 @@ __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(VueTouch, { name: 'v-to
         day: 30
       },
       years: [1900, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013],
-      months: Array.apply(null, Array(12)).map((item, i) => i),
+      months: Array.apply(null, Array(12)).map(function (item, i) {
+        return i;
+      }),
       panData: {
         startY: 0,
         lastTs: 0,
@@ -327,73 +356,79 @@ __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(VueTouch, { name: 'v-to
       }
     };
   },
+
   props: {
     show: {
       default: false
     }
   },
-  updated() {
-    // 修正滚轮位置
-    this.$refs.PickerBody && this.fixPickerPosition();
-  },
   watch: {
     chosenIndex: {
       deep: true,
-      handler() {
+      handler: function handler() {
         this.fixPickerPosition();
       }
     }
   },
   methods: {
-    mask() {
-      this.$emit('mask');
+    initPicker: function initPicker() {
+      this.$refs.PickerBody && this.fixPickerPosition();
+    },
+    emit: function emit(action) {
+      this.$emit(action);
+    },
+    confirm: function confirm() {
+      this.$emit('confirm', { ts: this.chosenDate.getTime() });
     },
 
     /* 根据chosenIndex来修正滚轮的位置 */
-    fixPickerPosition() {
+    fixPickerPosition: function fixPickerPosition() {
       if (this.$refs.PickerBody) {
-        let parent = this.$refs.PickerBody;
-        let children = this.$refs.PickerBody.children;
-        for (let i = 0; i < children.length; i++) {
-          let node = children[i],
+        var parent = this.$refs.PickerBody;
+        var children = this.$refs.PickerBody.children;
+        for (var i = 0; i < children.length; i++) {
+          var node = children[i],
               type = node.getAttribute('picker-type'),
               index = this.chosenIndex[type],
               targetNode = this.getContentNode(node);
-          targetNode.style.top = `${(parent.offsetHeight - this.itemHeight) / 2 - index * this.itemHeight}px`;
+          targetNode.style.top = (parent.offsetHeight - this.itemHeight) / 2 - index * this.itemHeight + 'px';
         }
       } else {
         console.warn('picker没有dom实例，不能校准选择器位置');
       }
-      //        console.log(this.chosenDate.getTime())
+      //        let time = new Date(this.chosenDate.getTime());
     },
+
     /* 获取到正确的滚轮节点 */
-    getContentNode(groupNode) {
-      let node = groupNode.firstChild;
+    getContentNode: function getContentNode(groupNode) {
+      var node = groupNode.firstChild;
       while (!node.classList.contains('picker-content')) {
         node = node.nextElementSibling;
       }
       return node;
     },
+
     /* 滚轮的点击选择 */
-    tapChoose(e) {
+    tapChoose: function tapChoose(e) {
       e.preventDefault();
-      let tar = e.target;
+      var tar = e.target;
       if (tar.classList.contains('picker-mask')) {
-        let parent = tar.parentNode,
+        var parent = tar.parentNode,
             parentH = parent.clientHeight,
             type = parent.getAttribute('picker-type');
-        let distance = e.offsetY - (parentH - this.itemHeight) / 2;
-        let disIndex = Math.floor(distance / this.itemHeight);
-        let targetIndex = this.chosenIndex[type] + disIndex;
+        var distance = e.offsetY - (parentH - this.itemHeight) / 2;
+        var disIndex = Math.floor(distance / this.itemHeight);
+        var targetIndex = this.chosenIndex[type] + disIndex;
         targetIndex = targetIndex < 0 ? 0 : targetIndex;
-        targetIndex = targetIndex >= this[`${type}s`].length ? this[`${type}s`].length - 1 : targetIndex;
+        targetIndex = targetIndex >= this[type + 's'].length ? this[type + 's'].length - 1 : targetIndex;
         this.chosenIndex[type] = targetIndex;
       }
     },
+
     /* 处理滚轮的触摸滚动 */
-    touchStart(e) {
+    touchStart: function touchStart(e) {
       e.preventDefault();
-      let targetNode = this.getContentNode(e.target.parentNode);
+      var targetNode = this.getContentNode(e.target.parentNode);
       targetNode.style.transition = 'none';
       this.panData.startY = targetNode.style.top.slice(0, -2);
 
@@ -401,10 +436,10 @@ __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(VueTouch, { name: 'v-to
       this.panData.lastTs = e.timeStamp;
       this.panData.deltaY = 0;
     },
-    touchMove(e) {
+    touchMove: function touchMove(e) {
       e.preventDefault();
-      let targetNode = this.getContentNode(e.target.parentNode);
-      targetNode.style.top = `${parseInt(this.panData.startY) + e.deltaY}px`;
+      var targetNode = this.getContentNode(e.target.parentNode);
+      targetNode.style.top = parseInt(this.panData.startY) + e.deltaY + 'px';
 
       /*惯性滑动处理*/
       if (e.timeStamp - this.panData.lastTs > 300) {
@@ -412,26 +447,26 @@ __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(VueTouch, { name: 'v-to
         this.panData.deltaY = e.deltaY - this.panData.deltaY;
       }
     },
-    touchEnd(e) {
+    touchEnd: function touchEnd(e) {
       e.preventDefault();
-      let parent = e.target.parentNode;
-      let targetNode = this.getContentNode(parent),
+      var parent = e.target.parentNode;
+      var targetNode = this.getContentNode(parent),
           nowTop = parseInt(targetNode.style.top.slice(0, -2));
 
       /*惯性滑动处理*/
-      let dT = e.timeStamp - this.panData.lastTs,
+      var dT = e.timeStamp - this.panData.lastTs,
           dS = e.deltaY - this.panData.deltaY;
-      let dD = -Math.pow(dS / dT, 2) / (2 * -0.006); // 加速度距离公式 v*v - v0*v0 = 2ax
+      var dD = -Math.pow(dS / dT, 2) / (2 * -0.006); // 加速度距离公式 v*v - v0*v0 = 2ax
       if (dS < 0) {
         dD = -dD;
       }
       nowTop += dD;
 
-      let type = parent.getAttribute('picker-type');
-      let targetIndex = Math.round((parent.clientHeight / 2 - nowTop) / this.itemHeight - 0.5);
+      var type = parent.getAttribute('picker-type');
+      var targetIndex = Math.round((parent.clientHeight / 2 - nowTop) / this.itemHeight - 0.5);
 
       targetIndex = targetIndex < 0 ? 0 : targetIndex;
-      targetIndex = targetIndex >= this[`${type}s`].length ? this[`${type}s`].length - 1 : targetIndex;
+      targetIndex = targetIndex >= this[type + 's'].length ? this[type + 's'].length - 1 : targetIndex;
 
       targetNode.style.transition = null;
       this.chosenIndex[type] = targetIndex;
@@ -439,45 +474,54 @@ __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(VueTouch, { name: 'v-to
     }
   },
   computed: {
-    days() {
-      let year = this.years[this.chosenIndex.year],
+    days: function days() {
+      var year = this.years[this.chosenIndex.year],
           month = this.months[this.chosenIndex.month] + 1,
-          days;
+          days = void 0;
       if ([1, 3, 5, 7, 8, 10, 12].indexOf(month) > -1) {
-        days = Array.apply(null, Array(31)).map((item, i) => i + 1);
+        days = Array.apply(null, Array(31)).map(function (item, i) {
+          return i + 1;
+        });
       } else if (month == 2) {
         if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
-          days = Array.apply(null, Array(29)).map((item, i) => i + 1);
+          days = Array.apply(null, Array(29)).map(function (item, i) {
+            return i + 1;
+          });
         } else {
-          days = Array.apply(null, Array(28)).map((item, i) => i + 1);
+          days = Array.apply(null, Array(28)).map(function (item, i) {
+            return i + 1;
+          });
         }
       } else {
-        days = Array.apply(null, Array(30)).map((item, i) => i + 1);
+        days = Array.apply(null, Array(30)).map(function (item, i) {
+          return i + 1;
+        });
       }
       if (this.chosenIndex.day - days.length > -1) {
         this.chosenIndex.day = days.length - 1;
       }
       return days;
     },
-    chosenDate() {
-      let chosen = this.chosenIndex,
+    chosenDate: function chosenDate() {
+      var chosen = this.chosenIndex,
           date = new Date(this.years[chosen.year], this.months[chosen.month], this.days[chosen.day]);
       return date;
     }
   },
-  components: { picker: __WEBPACK_IMPORTED_MODULE_1__picker_picker_vue___default.a }
+  components: { picker: _picker2.default }
 };
 
 /***/ }),
 
 /***/ 125:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 //
 //
 //
@@ -498,27 +542,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-/* harmony default export */ __webpack_exports__["default"] = {
-  data() {
+exports.default = {
+  data: function data() {
     return {
-      showPicker: false
+      showPicker: false,
+      showBg: false
     };
   },
+
   props: {
     show: {
       type: Boolean,
       default: false
     }
   },
+  watch: {
+    show: function show(to) {
+      if (to == false) {
+        this.showPicker = false;
+      } else {
+        this.showBg = true;
+      }
+    }
+  },
   methods: {
-    mask() {
-      this.showPicker = false;
+    maskClick: function maskClick() {
+      this.$emit('mask');
     },
-    enter() {
+    bgEnter: function bgEnter() {
       this.showPicker = true;
     },
-    afterLeave() {
-      this.$emit('mask');
+    afterPickerLeave: function afterPickerLeave() {
+      this.showBg = false;
+    },
+    afterPickerEnter: function afterPickerEnter() {
+      this.$emit('afterShow');
     }
   },
   components: {}
@@ -527,71 +585,96 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ }),
 
 /***/ 126:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_button_button_vue__ = __webpack_require__(117);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_button_button_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_button_button_vue__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-/* harmony default export */ __webpack_exports__["default"] = {
-  data() {
+var _button = __webpack_require__(117);
+
+var _button2 = _interopRequireDefault(_button);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+  data: function data() {
     return {};
   },
-  components: { btn: __WEBPACK_IMPORTED_MODULE_0__components_button_button_vue___default.a }
-};
+
+  components: { btn: _button2.default }
+}; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /***/ }),
 
 /***/ 127:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_modal_modal_vue__ = __webpack_require__(320);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_modal_modal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_modal_modal_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_button__ = __webpack_require__(117);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_button___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_button__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_picker_picker_vue__ = __webpack_require__(118);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_picker_picker_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_picker_picker_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_picker_dt_picker_dt_vue__ = __webpack_require__(321);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_picker_dt_picker_dt_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_picker_dt_picker_dt_vue__);
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _modal = __webpack_require__(320);
+
+var _modal2 = _interopRequireDefault(_modal);
+
+var _button = __webpack_require__(117);
+
+var _button2 = _interopRequireDefault(_button);
+
+var _picker = __webpack_require__(118);
+
+var _picker2 = _interopRequireDefault(_picker);
+
+var _pickerDt = __webpack_require__(321);
+
+var _pickerDt2 = _interopRequireDefault(_pickerDt);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
 //
 //
 //
@@ -630,14 +713,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-
-//  import btn from '../../components/button/button.vue'
-
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = {
-  data() {
+exports.default = {
+  data: function data() {
     return {
       modal: {
         show: false
@@ -650,22 +727,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
     };
   },
+
   methods: {
-    show(module, arg) {
+    show: function show(module, arg) {
       this[module].show = true;
       this[module].type = arg;
+    },
+    handleDTpicker: function handleDTpicker(time) {
+      console.log(time);
     }
   },
-  components: { modal: __WEBPACK_IMPORTED_MODULE_0__components_modal_modal_vue___default.a, btn: __WEBPACK_IMPORTED_MODULE_1_button___default.a, picker: __WEBPACK_IMPORTED_MODULE_2__components_picker_picker_vue___default.a, dtpicker: __WEBPACK_IMPORTED_MODULE_3__components_picker_dt_picker_dt_vue___default.a }
+  components: { modal: _modal2.default, btn: _button2.default, picker: _picker2.default, dtpicker: _pickerDt2.default }
 };
 
 /***/ }),
 
 /***/ 128:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 //
 //
 //
@@ -678,10 +763,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-/* harmony default export */ __webpack_exports__["default"] = {
-  data() {
+exports.default = {
+  data: function data() {
     return {};
   },
+
   components: {}
 };
 
@@ -996,21 +1082,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "name": "fade"
     },
     on: {
-      "enter": _vm.enter
+      "enter": _vm.bgEnter
     }
-  }, [(_vm.show) ? _c('div', {
+  }, [(_vm.showBg) ? _c('div', {
     staticClass: "picker-wrap"
   }, [_c('div', {
     staticClass: "mask",
     on: {
-      "click": _vm.mask
+      "click": _vm.maskClick
     }
   }), _vm._v(" "), _c('transition', {
     attrs: {
       "name": "popup-fade"
     },
     on: {
-      "after-leave": _vm.afterLeave
+      "after-enter": _vm.afterPickerEnter,
+      "after-leave": _vm.afterPickerLeave
     }
   }, [(_vm.showPicker) ? _c('div', {
     staticClass: "picker"
@@ -1111,13 +1198,32 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "show": _vm.show
     },
     on: {
-      "mask": _vm.mask
+      "mask": function($event) {
+        _vm.emit('mask')
+      },
+      "afterShow": _vm.initPicker
     }
   }, [_c('div', {
     staticClass: "picker-dt-wrap"
   }, [_c('div', {
     staticClass: "picker-hd"
-  }, [_c('a', [_vm._v("取消")]), _vm._v(" "), _c('a', [_vm._v("确定")])]), _vm._v(" "), _c('div', {
+  }, [_c('a', {
+    attrs: {
+      "href": "javascript:;"
+    },
+    on: {
+      "click": function($event) {
+        _vm.emit('cancel')
+      }
+    }
+  }, [_vm._v("取消")]), _vm._v(" "), _c('a', {
+    attrs: {
+      "href": "javascript:;"
+    },
+    on: {
+      "click": _vm.confirm
+    }
+  }, [_vm._v("确定")])]), _vm._v(" "), _c('div', {
     ref: "PickerBody",
     staticClass: "picker-bd"
   }, [_c('div', {
@@ -1334,13 +1440,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "show": _vm.dtpicker.show
     },
     on: {
+      "confirm": _vm.handleDTpicker,
+      "cancel": function($event) {
+        _vm.dtpicker.show = false
+      },
       "mask": function($event) {
         _vm.dtpicker.show = false
       }
     }
-  })], 1), _vm._v(" "), _vm._l((100), function(i) {
-    return _c('div', [_vm._v(_vm._s(i))])
-  })], 2)
+  })], 1)], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

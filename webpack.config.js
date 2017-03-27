@@ -13,8 +13,8 @@ module.exports = {
   },
   output: {
     path: paths.distDir,
-    filename: 'js/[name].js',
-    chunkFilename: '[id].[name].js'
+    filename: 'js/[name].[hash:4].js',
+    chunkFilename: '[id].[name].[chunkhash:4].js'
   },
   resolve: {
     alias: {

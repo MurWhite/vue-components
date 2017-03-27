@@ -1,9 +1,10 @@
 <template>
-  <transition name="fade" v-on:enter="enter">
-    <div v-if="show" class="picker-wrap">
-      <div class="mask" @click="mask"></div>
-      <transition name="popup-fade" v-on:after-leave="afterLeave"
-                  v-on:after-enter="afterEnter">
+  <transition name="fade" v-on:enter="bgEnter">
+    <div v-if="showBg" class="picker-wrap">
+      <div class="mask" @click="maskClick"></div>
+      <transition name="popup-fade"
+                  v-on:after-enter="afterPickerEnter"
+                  v-on:after-leave="afterPickerLeave">
         <div v-if="showPicker" class="picker">
           <slot>空白的popup</slot>
         </div>
@@ -20,7 +21,8 @@
   export default{
     data () {
       return {
-        showPicker: false
+        showPicker: false,
+        showBg: false
       }
     },
     props: {
@@ -29,17 +31,26 @@
         default: false
       }
     },
+    watch:{
+      show(to){
+        if(to == false){
+          this.showPicker = false;
+        }else{
+          this.showBg = true;
+        }
+      }
+    },
     methods: {
-      mask(){
-        this.showPicker = false;
-      },
-      enter(){
-        this.showPicker = true
-      },
-      afterLeave(){
+      maskClick(){
         this.$emit('mask');
       },
-      afterEnter(){
+      bgEnter(){
+        this.showPicker = true
+      },
+      afterPickerLeave(){
+        this.showBg = false;
+      },
+      afterPickerEnter(){
         this.$emit('afterShow')
       }
     },
