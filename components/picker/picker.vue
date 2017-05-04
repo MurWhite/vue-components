@@ -3,7 +3,7 @@
     <div v-if="showBg" class="picker-wrap">
       <div class="mask" @click="maskClick"></div>
       <transition name="popup-fade"
-                  v-on:after-enter="afterPickerEnter"
+                  v-on:enter="afterPickerEnter"
                   v-on:after-leave="afterPickerLeave">
         <div v-if="showPicker" class="picker">
           <slot>空白的popup</slot>

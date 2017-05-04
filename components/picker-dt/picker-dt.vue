@@ -68,27 +68,107 @@
     data () {
       let now = new Date(),
         year = now.getFullYear(),
-        month = now.getMonth();
+        month = now.getMonth(),
+        day = now.getDate();
       return {
         itemHeight: 40,
         chosenIndex: {
-          year: 1,
-          month: 2,
-          day: 30
+          year: 5,
+          month: month,
+          day: day - 1
         },
-        years: [1900, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013],
         months: Array.apply(null, Array(12)).map((item, i)=> i),
         panData: {
           startY: 0,
           lastTs: 0,
           lastY: 0
-        }
+        },
+        dateRange: [
+          {from: '', to: ''}
+        ]
       }
     },
     props: {
       show: {
         default: false
       },
+      years: {
+        type: Array,
+        default(){
+          let nY = new Date().getFullYear();
+          return Array.apply(null, Array(10)).map((item, i)=> nY + i - 5)
+        }
+      },
+      range: {
+        validator(val){
+          let from, to;
+          if (typeof val === 'string' || typeof val === 'number') {
+            console.log('初始值：', val);
+            let range = getRange(val);
+            if (!range) {
+              return false;
+            }
+          }
+          else if (Object.prototype.toString.call(val) === '[object Array]') {
+            console.log('初始数组是', val);
+            let rangeArr = val.map(item=> {
+              return getRange(item)
+            });
+            if (!rangeArr.every(item=>item !== null)) {
+              return false
+            }
+          }
+          else if (Object.prototype.toString.call(val) === '[object Object]') {
+            console.log('初始对象是：', val);
+            let range = getRange(val.from, val.to);
+            if(!range) return false;
+            if (range && range.to - range.from < 0) {
+              console.error('结束时间不能小于开始时间', range);
+              return false;
+            }
+          }
+          else {
+            console.warn(`range(${typeof val})不是合适的类型`);
+            return false;
+          }
+          console.info('合法的时间啊')
+          return true;
+
+          function getRange(fromStr, toStr) {
+            let from = getValidDate(fromStr, 'start');
+            if (!from) {
+              console.error(`${fromStr}不是合法的日期`);
+              return null;
+            }
+            toStr = toStr || fromStr;
+            let to = getValidDate(toStr, 'end');
+            if (!to) {
+              console.error(`${toStr}不是合法的日期`);
+              return null;
+            }
+            return {from: from, to: to}
+          }
+
+          function getValidDate(date, trend) {
+            date += '';
+            let d = new Date(date);
+            if (d == 'Invalid Date') {
+              return null;
+            }
+            if (trend && trend === 'end') {
+              let dArr = date.split('-');
+              let month = dArr[2] ? (dArr[1] - 1) : dArr[1];
+              // new Date(year,month,date)默认是本地早上0点
+              // new Date(string)默认是格里尼治0点
+              // 此处统一为格林尼治时间
+              let offset = new Date().getTimezoneOffset() / 60;
+              return new Date(dArr[0], dArr[1] ? month : 12, dArr[2] || -0, -offset);
+            }
+            return d;
+          }
+        }
+      },
+      value: String
     },
     watch: {
       chosenIndex: {
@@ -98,16 +178,28 @@
         }
       }
     },
+//    model: {
+//      prop: 'checked',
+//      event: 'change'
+//    },
     methods: {
       initPicker(){
         this.$refs.PickerBody && this.fixPickerPosition();
+        console.log(this.range)
       },
       emit(action){
         this.$emit(action)
       },
       confirm(){
-        this.$emit('confirm',{ts: this.chosenDate.getTime()})
+        this.$emit('confirm', {ts: this.chosenDate.getTime()})
       },
+
+      /*日期修正的方法*/
+      getValidDate(date){
+
+        return null;
+      },
+
       /* 根据chosenIndex来修正滚轮的位置 */
       fixPickerPosition(){
         if (this.$refs.PickerBody) {
@@ -120,10 +212,10 @@
               targetNode = this.getContentNode(node);
             targetNode.style.top = `${(parent.offsetHeight - this.itemHeight) / 2 - index * this.itemHeight}px`;
           }
+          this.$emit('input',this.chosenDate.getTime()+'')
         } else {
           console.warn('picker没有dom实例，不能校准选择器位置')
         }
-//        let time = new Date(this.chosenDate.getTime());
       },
       /* 获取到正确的滚轮节点 */
       getContentNode(groupNode){
@@ -177,9 +269,11 @@
           nowTop = parseInt(targetNode.style.top.slice(0, -2));
 
         /*惯性滑动处理*/
-        let dT = e.timeStamp - this.panData.lastTs,dS = e.deltaY - this.panData.deltaY;
-        let dD = -Math.pow(dS/dT,2)/(2 * -0.006);   // 加速度距离公式 v*v - v0*v0 = 2ax
-        if(dS < 0){dD = -dD}
+        let dT = e.timeStamp - this.panData.lastTs, dS = e.deltaY - this.panData.deltaY;
+        let dD = -Math.pow(dS / dT, 2) / (2 * -0.006);   // 加速度距离公式 v*v - v0*v0 = 2ax
+        if (dS < 0) {
+          dD = -dD
+        }
         nowTop += dD;
 
         let type = parent.getAttribute('picker-type');

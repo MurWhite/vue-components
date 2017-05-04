@@ -4,7 +4,8 @@
     <btn class="btn btn_primary" @click="show('modal')">显示最简单modal</btn>
     <btn class="btn btn_primary" @click="show('modal','dialog')">显示对话框</btn>
     <btn class="btn btn_primary" @click="show('picker','dialog')">选择器</btn>
-    <btn class="btn btn_primary" @click="show('dtpicker')">日期选择器-年月日</btn>
+    <btn class="btn btn_primary" @click="show('dtPicker')">日期选择器-年月日</btn>
+    <div>{{dtPicker.chosenDate}}</div>
     <modal :show="modal.show" :type="modal.type" title="标题"
            @close="modal.show = false" @mask="modal.show = false">
       <div slot="body" style="padding: 1rem">
@@ -21,10 +22,11 @@
     </modal>
     <picker :show="picker.show" @mask="picker.show=false"/>
     <keep-alive>
-      <dtpicker :show="dtpicker.show"
+      <dtPicker :show="dtPicker.show" :range="dtPicker.rangeObj"
+                v-model="dtPicker.chosenDate"
                 @confirm="handleDTpicker"
-                @cancel="dtpicker.show=false"
-                @mask="dtpicker.show=false"/>
+                @cancel="dtPicker.show=false"
+                @mask="dtPicker.show=false"/>
     </keep-alive>
   </div>
 </template>
@@ -43,7 +45,7 @@
   import modal from '../../components/modal/modal.vue'
   import btn from '../../components/button/button.vue'
   import picker from '../../components/picker/picker.vue'
-  import dtpicker from '../../components/picker-dt/picker-dt.vue'
+  import dtPicker from '../../components/picker-dt/picker-dt.vue'
 
   export default{
     data () {
@@ -54,8 +56,13 @@
         picker: {
           show: false
         },
-        dtpicker: {
-          show: false
+        dtPicker: {
+          chosenDate:'qwer',
+          show: false,
+          range: {},
+          rangeStr: '2004-02',
+          rangeArr: [2017, '2016-08'],
+          rangeObj: {from: '2016-02', to: '2016-02-03'}
         }
       }
     },
@@ -65,9 +72,11 @@
         this[module].type = arg
       },
       handleDTpicker(time){
-        console.log(time)
+        console.log(time);
+//        this.dtPicker.chosenDate = time.ts;
+        this.dtPicker.show = false;
       }
     },
-    components: {modal, btn, picker, dtpicker}
+    components: {modal, btn, picker, dtPicker}
   }
 </script>
