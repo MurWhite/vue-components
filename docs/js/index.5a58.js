@@ -350,8 +350,8 @@ exports.default = {
         month: month,
         day: day - 1
       },
-      months: Array.apply(null, Array(12)).map(function (item, i) {
-        return i;
+      years: Array.apply(null, Array(10)).map(function (item, i) {
+        return year + i - 5;
       }),
       panData: {
         startY: 0,
@@ -366,83 +366,8 @@ exports.default = {
     show: {
       default: false
     },
-    years: {
-      type: Array,
-      default: function _default() {
-        var nY = new Date().getFullYear();
-        return Array.apply(null, Array(10)).map(function (item, i) {
-          return nY + i - 5;
-        });
-      }
-    },
     range: {
-      validator: function validator(val) {
-        var from = void 0,
-            to = void 0;
-        if (typeof val === 'string' || typeof val === 'number') {
-          console.log('初始值：', val);
-          var range = getRange(val);
-          if (!range) {
-            return false;
-          }
-        } else if (Object.prototype.toString.call(val) === '[object Array]') {
-          console.log('初始数组是', val);
-          var rangeArr = val.map(function (item) {
-            return getRange(item);
-          });
-          if (!rangeArr.every(function (item) {
-            return item !== null;
-          })) {
-            return false;
-          }
-        } else if (Object.prototype.toString.call(val) === '[object Object]') {
-          console.log('初始对象是：', val);
-          var _range = getRange(val.from, val.to);
-          if (!_range) return false;
-          if (_range && _range.to - _range.from < 0) {
-            console.error('结束时间不能小于开始时间', _range);
-            return false;
-          }
-        } else {
-          console.warn('range(' + (typeof val === 'undefined' ? 'undefined' : (0, _typeof3.default)(val)) + ')\u4E0D\u662F\u5408\u9002\u7684\u7C7B\u578B');
-          return false;
-        }
-        console.info('合法的时间啊');
-        return true;
-
-        function getRange(fromStr, toStr) {
-          var from = getValidDate(fromStr, 'start');
-          if (!from) {
-            console.error(fromStr + '\u4E0D\u662F\u5408\u6CD5\u7684\u65E5\u671F');
-            return null;
-          }
-          toStr = toStr || fromStr;
-          var to = getValidDate(toStr, 'end');
-          if (!to) {
-            console.error(toStr + '\u4E0D\u662F\u5408\u6CD5\u7684\u65E5\u671F');
-            return null;
-          }
-          return { from: from, to: to };
-        }
-
-        function getValidDate(date, trend) {
-          date += '';
-          var d = new Date(date);
-          if (d == 'Invalid Date') {
-            return null;
-          }
-          if (trend && trend === 'end') {
-            var dArr = date.split('-');
-            var month = dArr[2] ? dArr[1] - 1 : dArr[1];
-            // new Date(year,month,date)默认是本地早上0点
-            // new Date(string)默认是格里尼治0点
-            // 此处统一为格林尼治时间
-            var offset = new Date().getTimezoneOffset() / 60;
-            return new Date(dArr[0], dArr[1] ? month : 12, dArr[2] || -0, -offset);
-          }
-          return d;
-        }
-      }
+      required: true
     },
     value: String
   },
@@ -452,22 +377,120 @@ exports.default = {
       handler: function handler() {
         this.fixPickerPosition();
       }
+    },
+    show: function show(to) {
+      if (to === true) {
+        var range = this.fixRange(this.range);
+        if (range !== false) {
+          this.dateRange = range;
+          var from = range.from,
+              _to = range.to;
+
+          var fY = from.getFullYear(),
+              fM = from.getMonth(),
+              fD = from.getDate(),
+              tY = _to.getFullYear(),
+              tM = _to.getMonth(),
+              tD = _to.getDate(),
+              rY = void 0,
+              rM = void 0,
+              rD = void 0;
+          if (fY === tY) {
+            rY = [fY];
+          } else {
+            rY = Array.apply(null, Array(tY - fY + 1)).map(function (item, i) {
+              return fY + i;
+            });
+          }
+          this.years = rY;
+          if (this.chosenIndex.year > this.years.length) {
+            this.chosenIndex.year = Math.floor(this.years.length / 2);
+          }
+        } else {
+          console.error('无法显示');
+        }
+      }
     }
   },
-  //    model: {
-  //      prop: 'checked',
-  //      event: 'change'
-  //    },
   methods: {
     initPicker: function initPicker() {
       this.$refs.PickerBody && this.fixPickerPosition();
-      console.log(this.range);
+      //        console.log(this.range)
     },
     emit: function emit(action) {
       this.$emit(action);
     },
     confirm: function confirm() {
       this.$emit('confirm', { ts: this.chosenDate.getTime() });
+    },
+    fixRange: function fixRange(val) {
+      var from = void 0,
+          to = void 0;
+      if (typeof val === 'string' || typeof val === 'number') {
+        console.log('初始值：', val);
+        var range = getRange(val);
+        if (!range) {
+          return false;
+        }
+        from = range.from, to = range.to;
+      } else if (Object.prototype.toString.call(val) === '[object Array]') {
+        console.log('初始数组是', val);
+        var rangeArr = val.map(function (item) {
+          return getRange(item);
+        });
+        if (!rangeArr.every(function (item) {
+          return item !== null;
+        })) {
+          return false;
+        }
+      } else if (Object.prototype.toString.call(val) === '[object Object]') {
+        var _range = getRange(val.from, val.to);
+        if (!_range) return false;
+        if (_range && _range.to - _range.from < 0) {
+          console.error('结束时间不能小于开始时间', _range);
+          return false;
+        }
+        from = _range.from, to = _range.to;
+      } else {
+        console.warn('range(' + (typeof val === 'undefined' ? 'undefined' : (0, _typeof3.default)(val)) + ')\u4E0D\u662F\u5408\u9002\u7684\u7C7B\u578B');
+        return false;
+      }
+      console.info('修正后的range：', from, '=>', to);
+
+      return { from: from, to: to };
+
+      function getRange(fromStr, toStr) {
+        var from = getValidDate(fromStr, 'start');
+        if (!from) {
+          console.error(fromStr + '\u4E0D\u662F\u5408\u6CD5\u7684\u65E5\u671F');
+          return null;
+        }
+        toStr = toStr || fromStr;
+        var to = getValidDate(toStr, 'end');
+        if (!to) {
+          console.error(toStr + '\u4E0D\u662F\u5408\u6CD5\u7684\u65E5\u671F');
+          return null;
+        }
+        return { from: from, to: to };
+      }
+
+      function getValidDate(date, trend) {
+        date += '';
+        var d = new Date(date);
+        if (d == 'Invalid Date') {
+          return null;
+        }
+        if (trend && trend === 'end') {
+          var dArr = date.split('-');
+          var month = dArr[2] ? dArr[1] - 1 : dArr[1];
+          // new Date(year,month,date)默认是本地早上0点
+          // new Date(string)默认是格里尼治0点
+          // 此处统一为格林尼治时间
+          var offset = new Date().getTimezoneOffset() / 60;
+          return new Date(dArr[0], dArr[1] ? month : 12, dArr[2] || -0, -offset);
+        }
+        return d;
+      }
     },
 
 
@@ -490,9 +513,11 @@ exports.default = {
               targetNode = this.getContentNode(node);
           targetNode.style.top = (parent.offsetHeight - this.itemHeight) / 2 - index * this.itemHeight + 'px';
         }
-        this.$emit('input', this.chosenDate.getTime() + '');
+        var date = this.chosenDate;
+        // TODO:emit 的格式需要是： yyyy-mm-dd
+        this.$emit('input', date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
       } else {
-        console.warn('picker没有dom实例，不能校准选择器位置');
+        console.warn('picker的dom还未实例化，暂时无法校准选择器位置');
       }
     },
 
@@ -571,31 +596,51 @@ exports.default = {
     }
   },
   computed: {
-    days: function days() {
-      var year = this.years[this.chosenIndex.year],
-          month = this.months[this.chosenIndex.month] + 1,
-          days = void 0;
-      if ([1, 3, 5, 7, 8, 10, 12].indexOf(month) > -1) {
-        days = Array.apply(null, Array(31)).map(function (item, i) {
-          return i + 1;
-        });
-      } else if (month == 2) {
-        if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
-          days = Array.apply(null, Array(29)).map(function (item, i) {
-            return i + 1;
-          });
-        } else {
-          days = Array.apply(null, Array(28)).map(function (item, i) {
-            return i + 1;
-          });
-        }
-      } else {
-        days = Array.apply(null, Array(30)).map(function (item, i) {
-          return i + 1;
-        });
+    months: function months() {
+      var startMonth = 0,
+          endMonth = 11;
+      if (this.chosenIndex.year === 0) {
+        startMonth = this.dateRange.from.getMonth();
       }
-      if (this.chosenIndex.day - days.length > -1) {
-        this.chosenIndex.day = days.length - 1;
+      if (this.chosenIndex.year === this.years.length - 1) {
+        endMonth = this.dateRange.to.getMonth();
+      }
+      var monthLength = endMonth - startMonth + 1;
+      if (this.chosenIndex.month > monthLength - 1) {
+        this.chosenIndex.month = Math.floor(monthLength / 2);
+      }
+      return Array.apply(null, Array(monthLength)).map(function (item, i) {
+        return i + startMonth;
+      });
+    },
+    days: function days() {
+      var monthIndex = this.chosenIndex.month;
+      var year = this.years[this.chosenIndex.year],
+          month = this.months[monthIndex] + 1,
+          days = void 0,
+          startDay = 1,
+          endDay = false;
+
+      if (this.chosenIndex.year === 0 && monthIndex === 0) {
+        startDay = this.dateRange.from.getDate();
+      }
+      if (this.chosenIndex.year === this.years.length - 1 && monthIndex === this.months.length - 1) {
+        endDay = this.dateRange.to.getDate();
+      } else {
+        if ([1, 3, 5, 7, 8, 10, 12].indexOf(month) > -1) {
+          endDay = 31;
+        } else if (month === 2) {
+          endDay = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0) ? 29 : 28;
+        } else {
+          endDay = 30;
+        }
+      }
+      var dayLength = endDay - startDay + 1;
+      days = Array.apply(null, Array(dayLength)).map(function (item, i) {
+        return i + startDay;
+      });
+      if (this.chosenIndex.day > dayLength - 1) {
+        this.chosenIndex.day = dayLength - 1;
       }
       return days;
     },
@@ -821,13 +866,13 @@ exports.default = {
       picker: {
         show: false
       },
+      chosenDate: 'dada',
       dtPicker: {
-        chosenDate: 'qwer',
         show: false,
         range: {},
         rangeStr: '2004-02',
         rangeArr: [2017, '2016-08'],
-        rangeObj: { from: '2016-02', to: '2016-02-03' }
+        rangeObj: { from: '2015-01-30', to: '2028-12-03' }
       }
     };
   },
@@ -1504,7 +1549,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.show('dtPicker')
       }
     }
-  }, [_vm._v("日期选择器-年月日")]), _vm._v(" "), _c('div', [_vm._v(_vm._s(_vm.dtPicker.chosenDate))]), _vm._v(" "), _c('modal', {
+  }, [_vm._v("日期选择器-年月日")]), _vm._v(" "), _c('div', [_vm._v(_vm._s(_vm.chosenDate))]), _vm._v(" "), _c('modal', {
     attrs: {
       "show": _vm.modal.show,
       "type": _vm.modal.type,
@@ -1556,9 +1601,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     },
     model: {
-      value: (_vm.dtPicker.chosenDate),
+      value: (_vm.chosenDate),
       callback: function($$v) {
-        _vm.dtPicker.chosenDate = $$v
+        _vm.chosenDate = $$v
       }
     }
   })], 1)], 1)
