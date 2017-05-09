@@ -77,7 +77,7 @@
           month: month,
           day: day - 1
         },
-        months: Array.apply(null, Array(12)).map((item, i)=> i),
+        years: Array.apply(null, Array(10)).map((item, i) => year + i - 5),
         panData: {
           startY: 0,
           lastTs: 0,
@@ -92,81 +92,8 @@
       show: {
         default: false
       },
-      years: {
-        type: Array,
-        default(){
-          let nY = new Date().getFullYear();
-          return Array.apply(null, Array(10)).map((item, i)=> nY + i - 5)
-        }
-      },
       range: {
-        validator(val){
-          let from, to;
-          if (typeof val === 'string' || typeof val === 'number') {
-            console.log('初始值：', val);
-            let range = getRange(val);
-            if (!range) {
-              return false;
-            }
-          }
-          else if (Object.prototype.toString.call(val) === '[object Array]') {
-            console.log('初始数组是', val);
-            let rangeArr = val.map(item=> {
-              return getRange(item)
-            });
-            if (!rangeArr.every(item=>item !== null)) {
-              return false
-            }
-          }
-          else if (Object.prototype.toString.call(val) === '[object Object]') {
-            console.log('初始对象是：', val);
-            let range = getRange(val.from, val.to);
-            if(!range) return false;
-            if (range && range.to - range.from < 0) {
-              console.error('结束时间不能小于开始时间', range);
-              return false;
-            }
-          }
-          else {
-            console.warn(`range(${typeof val})不是合适的类型`);
-            return false;
-          }
-          console.info('合法的时间啊')
-          return true;
-
-          function getRange(fromStr, toStr) {
-            let from = getValidDate(fromStr, 'start');
-            if (!from) {
-              console.error(`${fromStr}不是合法的日期`);
-              return null;
-            }
-            toStr = toStr || fromStr;
-            let to = getValidDate(toStr, 'end');
-            if (!to) {
-              console.error(`${toStr}不是合法的日期`);
-              return null;
-            }
-            return {from: from, to: to}
-          }
-
-          function getValidDate(date, trend) {
-            date += '';
-            let d = new Date(date);
-            if (d == 'Invalid Date') {
-              return null;
-            }
-            if (trend && trend === 'end') {
-              let dArr = date.split('-');
-              let month = dArr[2] ? (dArr[1] - 1) : dArr[1];
-              // new Date(year,month,date)默认是本地早上0点
-              // new Date(string)默认是格里尼治0点
-              // 此处统一为格林尼治时间
-              let offset = new Date().getTimezoneOffset() / 60;
-              return new Date(dArr[0], dArr[1] ? month : 12, dArr[2] || -0, -offset);
-            }
-            return d;
-          }
-        }
+        required: true
       },
       value: String
     },
@@ -176,22 +103,111 @@
         handler(){
           this.fixPickerPosition();
         }
+      },
+      show(to){
+        if (to === true) {
+          let range = this.fixRange(this.range);
+          if (range !== false) {
+            this.dateRange = range;
+            let {from, to} = range;
+            let fY = from.getFullYear(), fM = from.getMonth(), fD = from.getDate(),
+              tY = to.getFullYear(), tM = to.getMonth(), tD = to.getDate(),
+              rY, rM, rD;
+            if (fY === tY) {
+              rY = [fY];
+            } else {
+              rY = Array.apply(null, Array(tY - fY + 1)).map((item, i) => fY + i)
+            }
+            this.years = rY;
+            if (this.chosenIndex.year > this.years.length) {
+              this.chosenIndex.year = Math.floor(this.years.length / 2);
+            }
+          } else {
+            console.error('无法显示')
+          }
+        }
       }
     },
-//    model: {
-//      prop: 'checked',
-//      event: 'change'
-//    },
     methods: {
       initPicker(){
         this.$refs.PickerBody && this.fixPickerPosition();
-        console.log(this.range)
+//        console.log(this.range)
       },
       emit(action){
         this.$emit(action)
       },
       confirm(){
         this.$emit('confirm', {ts: this.chosenDate.getTime()})
+      },
+
+      fixRange(val){
+        let from, to;
+        if (typeof val === 'string' || typeof val === 'number') {
+          console.log('初始值：', val);
+          let range = getRange(val);
+          if (!range) {
+            return false;
+          }
+          from = range.from, to = range.to;
+        }
+        else if (Object.prototype.toString.call(val) === '[object Array]') {
+          console.log('初始数组是', val);
+          let rangeArr = val.map(item => {
+            return getRange(item)
+          });
+          if (!rangeArr.every(item => item !== null)) {
+            return false
+          }
+        }
+        else if (Object.prototype.toString.call(val) === '[object Object]') {
+          let range = getRange(val.from, val.to);
+          if (!range) return false;
+          if (range && range.to - range.from < 0) {
+            console.error('结束时间不能小于开始时间', range);
+            return false;
+          }
+          from = range.from, to = range.to;
+        }
+        else {
+          console.warn(`range(${typeof val})不是合适的类型`);
+          return false;
+        }
+        console.info('修正后的range：', from, '=>', to);
+
+        return {from: from, to: to};
+
+        function getRange(fromStr, toStr) {
+          let from = getValidDate(fromStr, 'start');
+          if (!from) {
+            console.error(`${fromStr}不是合法的日期`);
+            return null;
+          }
+          toStr = toStr || fromStr;
+          let to = getValidDate(toStr, 'end');
+          if (!to) {
+            console.error(`${toStr}不是合法的日期`);
+            return null;
+          }
+          return {from: from, to: to}
+        }
+
+        function getValidDate(date, trend) {
+          date += '';
+          let d = new Date(date);
+          if (d == 'Invalid Date') {
+            return null;
+          }
+          if (trend && trend === 'end') {
+            let dArr = date.split('-');
+            let month = dArr[2] ? (dArr[1] - 1) : dArr[1];
+            // new Date(year,month,date)默认是本地早上0点
+            // new Date(string)默认是格里尼治0点
+            // 此处统一为格林尼治时间
+            let offset = new Date().getTimezoneOffset() / 60;
+            return new Date(dArr[0], dArr[1] ? month : 12, dArr[2] || -0, -offset);
+          }
+          return d;
+        }
       },
 
       /*日期修正的方法*/
@@ -212,9 +228,11 @@
               targetNode = this.getContentNode(node);
             targetNode.style.top = `${(parent.offsetHeight - this.itemHeight) / 2 - index * this.itemHeight}px`;
           }
-          this.$emit('input',this.chosenDate.getTime()+'')
+          let date = this.chosenDate;
+          // TODO:emit 的格式需要是： yyyy-mm-dd
+          this.$emit('input', date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate())
         } else {
-          console.warn('picker没有dom实例，不能校准选择器位置')
+          console.warn('picker的dom还未实例化，暂时无法校准选择器位置')
         }
       },
       /* 获取到正确的滚轮节点 */
@@ -288,22 +306,43 @@
       }
     },
     computed: {
-      days() {
-        let year = this.years[this.chosenIndex.year],
-          month = this.months[this.chosenIndex.month] + 1, days;
-        if ([1, 3, 5, 7, 8, 10, 12].indexOf(month) > -1) {
-          days = Array.apply(null, Array(31)).map((item, i)=> i + 1);
-        } else if (month == 2) {
-          if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
-            days = Array.apply(null, Array(29)).map((item, i)=> i + 1);
-          } else {
-            days = Array.apply(null, Array(28)).map((item, i)=> i + 1);
-          }
-        } else {
-          days = Array.apply(null, Array(30)).map((item, i)=> i + 1);
+      months(){
+        let startMonth = 0, endMonth = 11;
+        if (this.chosenIndex.year === 0) {
+          startMonth = this.dateRange.from.getMonth();
         }
-        if (this.chosenIndex.day - days.length > -1) {
-          this.chosenIndex.day = days.length - 1;
+        if (this.chosenIndex.year === this.years.length - 1) {
+          endMonth = this.dateRange.to.getMonth();
+        }
+        let monthLength = endMonth - startMonth + 1;
+        if (this.chosenIndex.month > monthLength - 1) {
+          this.chosenIndex.month = Math.floor(monthLength / 2);
+        }
+        return Array.apply(null, Array(monthLength)).map((item, i) => i + startMonth);
+      },
+      days() {
+        let monthIndex = this.chosenIndex.month;
+        let year = this.years[this.chosenIndex.year],
+          month = this.months[monthIndex] + 1, days, startDay = 1, endDay = false;
+
+        if (this.chosenIndex.year === 0 && monthIndex === 0) {
+          startDay = this.dateRange.from.getDate();
+        }
+        if (this.chosenIndex.year === this.years.length - 1 && monthIndex === this.months.length - 1) {
+          endDay = this.dateRange.to.getDate();
+        } else {
+          if ([1, 3, 5, 7, 8, 10, 12].indexOf(month) > -1) {
+            endDay = 31;
+          } else if (month === 2) {
+            endDay = (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)) ? 29 : 28;
+          } else {
+            endDay = 30;
+          }
+        }
+        let dayLength = endDay - startDay + 1;
+        days = Array.apply(null, Array(dayLength)).map((item, i) => i + startDay);
+        if (this.chosenIndex.day > dayLength - 1) {
+          this.chosenIndex.day = dayLength - 1;
         }
         return days;
       },

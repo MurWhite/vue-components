@@ -1,4 +1,4 @@
-# picker-dt 
+# picker-dt
 
 使用了 `vue-touch` 组件，请 `npm install --save-dev vue-touch` 安装
 
@@ -11,7 +11,7 @@
 
 *可用类型*
 
-- String : `yyyy` `yyyy-mm` `yyyy-mm-dd`，必须符合这种格式(年份4位，月份2位，日期2位)
+- String : `yyyy` `yyyy-mm` `yyyy-mm-dd`，必须符合这种格式(年份4位，月份2位，日期2位), 因为设备兼容性
 - Object : 符合下列形式（to为null时，相当于String的情况）。String要求符合上述规则。
 ``` js
 {

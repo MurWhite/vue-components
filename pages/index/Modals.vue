@@ -5,7 +5,7 @@
     <btn class="btn btn_primary" @click="show('modal','dialog')">显示对话框</btn>
     <btn class="btn btn_primary" @click="show('picker','dialog')">选择器</btn>
     <btn class="btn btn_primary" @click="show('dtPicker')">日期选择器-年月日</btn>
-    <div>{{dtPicker.chosenDate}}</div>
+    <div>{{chosenDate}}</div>
     <modal :show="modal.show" :type="modal.type" title="标题"
            @close="modal.show = false" @mask="modal.show = false">
       <div slot="body" style="padding: 1rem">
@@ -23,7 +23,7 @@
     <picker :show="picker.show" @mask="picker.show=false"/>
     <keep-alive>
       <dtPicker :show="dtPicker.show" :range="dtPicker.rangeObj"
-                v-model="dtPicker.chosenDate"
+                v-model="chosenDate"
                 @confirm="handleDTpicker"
                 @cancel="dtPicker.show=false"
                 @mask="dtPicker.show=false"/>
@@ -56,13 +56,13 @@
         picker: {
           show: false
         },
+        chosenDate: 'dada',
         dtPicker: {
-          chosenDate:'qwer',
           show: false,
           range: {},
           rangeStr: '2004-02',
           rangeArr: [2017, '2016-08'],
-          rangeObj: {from: '2016-02', to: '2016-02-03'}
+          rangeObj: {from: '2015-01-30', to: '2028-12-03'}
         }
       }
     },
