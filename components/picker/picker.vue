@@ -13,7 +13,7 @@
   </transition>
 </template>
 <style lang="scss">
-  @import "../assests/mask.scss";
+  @import "../assest/mask.scss";
   @import "picker.scss";
   @import "../../components/animation/animation.scss";
 </style>

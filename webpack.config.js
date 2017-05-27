@@ -45,7 +45,7 @@ module.exports = {
         use: 'css-loader'
       },
       {
-        test: /\.(png|jpe?g|gif|svg|webp)(\?.*)?$/,
+        test: /\.(png|jpe?g|gif|svg|webp|eot|ttf)(\?.*)?$/,
         use: 'url-loader?limit=10000&name=images/[name].[ext]'
       }
     ]

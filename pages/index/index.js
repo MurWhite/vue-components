@@ -7,8 +7,14 @@ import VueRouter from 'vue-router'
 import Index from './index.vue'
 import Btns from './Buttons.vue'
 import Modals from './Modals.vue'
+import pkDate from '../../components/picker-dt/picker-dt.js'
+
+import {toast,loading} from '../../components/index'
 
 Vue.use(VueRouter);
+Vue.use(pkDate);
+Vue.use(toast)
+Vue.use(loading)
 
 const routes = [
   {

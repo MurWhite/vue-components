@@ -19,7 +19,7 @@
 </template>
 <style lang="scss">
   @import "modal.scss";
-  @import "../assests/mask.scss";
+  @import "../assest/mask.scss";
   @import "../../components/animation/animation.scss";
 </style>
 <script>

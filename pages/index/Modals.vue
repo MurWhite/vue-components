@@ -22,7 +22,7 @@
     </modal>
     <picker :show="picker.show" @mask="picker.show=false"/>
     <keep-alive>
-      <dtPicker :show="dtPicker.show" :range="dtPicker.rangeObj"
+      <picker-dt :show="dtPicker.show" :range="dtPicker.rangeObj"
                 v-model="chosenDate"
                 @confirm="handleDTpicker"
                 @cancel="dtPicker.show=false"
@@ -31,7 +31,7 @@
   </div>
 </template>
 <style lang="scss">
-  @import "../../components/assests/debris.scss";
+  @import "../../components/assest/debris.scss";
 
   .modals-wrap {
     z-index: 99;
@@ -45,7 +45,7 @@
   import modal from '../../components/modal/modal.vue'
   import btn from '../../components/button/button.vue'
   import picker from '../../components/picker/picker.vue'
-  import dtPicker from '../../components/picker-dt/picker-dt.vue'
+//  import dtPicker from '../../components/picker-dt/picker-dt.vue'
 
   export default{
     data () {
@@ -62,7 +62,7 @@
           range: {},
           rangeStr: '2004-02',
           rangeArr: [2017, '2016-08'],
-          rangeObj: {from: '2015-01-30', to: '2028-12-03'}
+          rangeObj: {from: '2016-01-12', to: '2019-06-15'}
         }
       }
     },
@@ -77,6 +77,6 @@
         this.dtPicker.show = false;
       }
     },
-    components: {modal, btn, picker, dtPicker}
+    components: {modal, btn, picker}
   }
 </script>

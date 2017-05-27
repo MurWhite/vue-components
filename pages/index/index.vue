@@ -18,7 +18,7 @@
   }
 </script>
 <style lang="scss">
-  @import "../../components/assests/reset.scss";
+  @import "../../components/assest/reset.scss";
   @import "../../components/animation/animation.scss";
 
   .wrap>.btn{

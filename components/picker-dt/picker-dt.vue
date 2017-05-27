@@ -65,6 +65,7 @@
 
   import picker from '../picker/picker.vue'
   export default{
+    name: 'picker-dt',
     data () {
       let now = new Date(),
         year = now.getFullYear(),
@@ -73,11 +74,13 @@
       return {
         itemHeight: 40,
         chosenIndex: {
-          year: 5,
+          year: 100,
           month: month,
           day: day - 1
         },
-        years: Array.apply(null, Array(10)).map((item, i) => year + i - 5),
+        years: Array.apply(null, new Array(10)).map((item, i) => year + i - 5),
+        months: [],
+        days: Array.apply(null, new Array(31)).map((item, i) => i + 1),
         panData: {
           startY: 0,
           lastTs: 0,
@@ -104,26 +107,42 @@
           this.fixPickerPosition();
         }
       },
+      'chosenIndex.year'(val, oldVal){
+        this.updateMonths();
+        if (val === 0 || oldVal === 0 || val === this.years.length - 1 || oldVal === this.years.length - 1) {
+          this.updateDays()
+        }
+      },
+      'chosenIndex.month'(){
+        this.updateDays();
+      },
       show(to){
         if (to === true) {
+          this.updateMonths();
+          this.updateDays();
           let range = this.fixRange(this.range);
           if (range !== false) {
             this.dateRange = range;
             let {from, to} = range;
-            let fY = from.getFullYear(), fM = from.getMonth(), fD = from.getDate(),
-              tY = to.getFullYear(), tM = to.getMonth(), tD = to.getDate(),
-              rY, rM, rD;
+            let fY = from.getFullYear(), tY = to.getFullYear(), rY;
             if (fY === tY) {
               rY = [fY];
             } else {
-              rY = Array.apply(null, Array(tY - fY + 1)).map((item, i) => fY + i)
+              rY = Array.apply(null, new Array(tY - fY + 1)).map((item, i) => fY + i)
             }
             this.years = rY;
-            if (this.chosenIndex.year > this.years.length) {
-              this.chosenIndex.year = Math.floor(this.years.length / 2);
+
+            if (this.chosenIndex.year > rY.length) {
+              let nY = new Date().getFullYear();
+              if (nY >= fY && nY <= tY) {
+                this.chosenIndex.year = nY - fY;
+              } else {
+                this.chosenIndex.year = Math.floor(this.years.length / 2);
+              }
             }
           } else {
-            console.error('无法显示')
+            console.error('range错误，无法显示组件');
+            return false;
           }
         }
       }
@@ -131,7 +150,6 @@
     methods: {
       initPicker(){
         this.$refs.PickerBody && this.fixPickerPosition();
-//        console.log(this.range)
       },
       emit(action){
         this.$emit(action)
@@ -140,6 +158,7 @@
         this.$emit('confirm', {ts: this.chosenDate.getTime()})
       },
 
+      // 校验并修正range参数
       fixRange(val){
         let from, to;
         if (typeof val === 'string' || typeof val === 'number') {
@@ -148,7 +167,8 @@
           if (!range) {
             return false;
           }
-          from = range.from, to = range.to;
+          from = range.from;
+          to = range.to;
         }
         else if (Object.prototype.toString.call(val) === '[object Array]') {
           console.log('初始数组是', val);
@@ -209,13 +229,11 @@
           return d;
         }
       },
-
       /*日期修正的方法*/
       getValidDate(date){
 
         return null;
       },
-
       /* 根据chosenIndex来修正滚轮的位置 */
       fixPickerPosition(){
         if (this.$refs.PickerBody) {
@@ -303,11 +321,11 @@
         targetNode.style.transition = null;
         this.chosenIndex[type] = targetIndex;
         this.fixPickerPosition()
-      }
-    },
-    computed: {
-      months(){
-        let startMonth = 0, endMonth = 11;
+      },
+
+      updateMonths(){
+        console.log('计算了一次month')
+        let startMonth = 0, endMonth = 11, nMonth = this.months[this.chosenIndex.month];
         if (this.chosenIndex.year === 0) {
           startMonth = this.dateRange.from.getMonth();
         }
@@ -315,14 +333,20 @@
           endMonth = this.dateRange.to.getMonth();
         }
         let monthLength = endMonth - startMonth + 1;
-        if (this.chosenIndex.month > monthLength - 1) {
-          this.chosenIndex.month = Math.floor(monthLength / 2);
-        }
-        return Array.apply(null, Array(monthLength)).map((item, i) => i + startMonth);
+        this.months = Array.apply(null, new Array(monthLength)).map((item, i) => i + startMonth);
+        this.$nextTick(() => {
+          if (this.chosenIndex.month > monthLength - 1) {
+            this.chosenIndex.month = Math.floor(monthLength / 2);
+          } else if (nMonth !== this.months[this.chosenIndex.month]) {
+            let tarIndex = nMonth - startMonth;
+            this.chosenIndex.month = tarIndex > -1 ? tarIndex : 0;
+          }
+        });
       },
-      days() {
+      updateDays(){
+        console.log('计算了一次day')
         let monthIndex = this.chosenIndex.month;
-        let year = this.years[this.chosenIndex.year],
+        let year = this.years[this.chosenIndex.year], nDate = this.days[this.chosenIndex.day],
           month = this.months[monthIndex] + 1, days, startDay = 1, endDay = false;
 
         if (this.chosenIndex.year === 0 && monthIndex === 0) {
@@ -340,12 +364,18 @@
           }
         }
         let dayLength = endDay - startDay + 1;
-        days = Array.apply(null, Array(dayLength)).map((item, i) => i + startDay);
-        if (this.chosenIndex.day > dayLength - 1) {
-          this.chosenIndex.day = dayLength - 1;
-        }
-        return days;
-      },
+        this.days = Array.apply(null, new Array(dayLength)).map((item, i) => i + startDay);
+        this.$nextTick(() => {
+          if (this.chosenIndex.day > dayLength - 1) {
+            this.chosenIndex.day = dayLength - 1;
+          } else if (nDate !== (this.days[this.chosenIndex.day])) {
+            let tarIndex = nDate - startDay;
+            this.chosenIndex.day = tarIndex > -1 ? tarIndex : 0;
+          }
+        })
+      }
+    },
+    computed: {
       chosenDate(){
         let chosen = this.chosenIndex,
           date = new Date(this.years[chosen.year], this.months[chosen.month], this.days[chosen.day]);

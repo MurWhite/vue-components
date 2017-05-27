@@ -11,17 +11,19 @@
       <btn class="btn mt-yellow">btn mt-yellow</btn>
       <btn class="btn mt-yellow disabled">btn mt-yellow disabled</btn>
       <btn class="btn mt-yellow disabled">
-        <i class="icon icon-loading"></i>
         btn mt-yellow disabled icon-loading
       </btn>
     </div>
     <div>
-      <btn class="btn btn_mini btn_primary">小按钮</btn>
+      <btn class="btn btn_mini btn_primary" @click="toast">toast</btn>
+      <btn class="btn btn_mini btn_primary" @click="loading('正在加载')">loading</btn>
+      <btn class="btn btn_mini btn_primary" @click="loading">cancel loading</btn>
+      <btn class="btn btn_mini btn_primary" @click="success">loading success</btn>
     </div>
   </div>
 </template>
 <style lang="scss">
-  @import "../../components/assests/icon.scss";
+
   @import "../../components/animation/animation.scss";
 
   .btn-group {
@@ -37,8 +39,24 @@
 
   export default{
     data () {
-      return {}
+      return {
+        count: 0
+      }
     },
-    components: {btn}
+    components: {btn},
+    methods: {
+      toast(){
+        this.$toast('click' + this.count++)
+      },
+      loading(msg){
+        this.$loading(msg)
+      },
+      success(msg){
+        this.$loading('正在加载')
+        setTimeout(()=>{
+          this.$success('加载成功')
+        },1000)
+      }
+    }
   }
 </script>
